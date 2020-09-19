@@ -5,14 +5,15 @@ services:
       build:
         context: ./cadvisor
       ports:
-        - "8080:8080"
-      command: -storage_driver=influxdb -storage_driver_db=docker -storage_driver_host=192.168.3.51:8086 -storage_driver_user=admin -storage_driver_password=admin
+        - "9101:8080"
+      command: -storage_driver=influxdb -storage_driver_db=docker -storage_driver_host=192.168.3.51:8086 -storage_driver_user=admin -storage_driver_password=admin --http_auth_file /home/cadvisor.htpasswd --http_auth_realm localhost
       privileged: true
       volumes:
         - /:/rootfs:ro
         - /sys:/sys:ro
         - /var/run:/var/run:rw
         - /var/lib/docker/:/var/lib/docker:ro
+        - ./cadvisor.htpasswd:/home/cadvisor.htpasswd
 ### node-exporter ####################################################
     node-exporter:
       build:
